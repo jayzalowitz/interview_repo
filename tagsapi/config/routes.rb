@@ -5,9 +5,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+  post 'tag' => 'tag#create', :defaults => { :format => :json }
+  get 'tag/:entity_type/:entity_id' => 'tag#find', :defaults => { :format => :json }
+  delete 'tag/:entity_type/:entity_id' => 'tag#delete', :defaults => { :format => :json }
 
+  get 'stats' => 'tag#stats', :defaults => { :format => :json }
+  get 'stats/:entity_type/:entity_id' => 'tag#entitystats', :defaults => { :format => :json }
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
