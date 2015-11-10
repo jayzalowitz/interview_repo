@@ -15,7 +15,7 @@ def get_questions
 	@query   = {}
 	@headers = { "Auth-Token"=> "b3c2ef1c-81fb-403e-8e4f-9d7c02bd68da",}
 
-	@response = HTTParty.get("http://challenge.teespring.com/question/evaluate", :query => @query, :headers => @headers ).to_h
+	@response = HTTParty.get("http://challenge.teespring.com/question/practice", :query => @query, :headers => @headers ).to_h
 	return @response["scenario_id"],@response["questions"]
 end
 
@@ -43,9 +43,30 @@ def from_hex(hex)
   [r,g,b]
 end
 
+def parse_question(question)
+	question.each do |color|
+		ap color
+		ap @colors_distance_hash
+		ap color["color"]
+		ap @price_sorted_colors
+		if !@colors_distance_hash[color["color"]]
+			@colors_distance_hash[color["color"]] = []
+			#ap @price_sorted_colors[0]
+			@price_sorted_colors.each_with_index do |checking_color,index| 
+				if @colors_hash[color["color"]]["position"] < checking_color["position"]
+					puts "larger"
+				else
+					puts "smaller"
+				end
+			end 
+		end
+	end  
+end 
+
 #create a hash to store numbers on
 @colors_hash = {}
 #sort by cost
+ap get_colors["inks"]
 @price_sorted_colors = get_colors["inks"].sort_by { |hsh| hsh["cost"] }
 @price_sorted_colors.each_with_index do |color,index| 
 	#set the index in there to optimize for fixing worst color
@@ -55,14 +76,15 @@ end
 
 @colors_distance_hash = {}
 
-
-ap @colors_hash
+#ap @colors_hash
 
 #Least optimal + correct solution, but needed to get things done, run through price sorted array and find distance.
 @scenario_id, @questions = get_questions
 
 #@questions[0] 
-ap @questions[0]["layers"]
+
+parse_question(@questions[0]["layers"])
+ap @questions[0]["layers"].each
 ap distance_from("#882FB5","#17B0D8")
 
 
